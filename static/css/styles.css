@@ -1,0 +1,64 @@
+body {
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-weight: bold;
+    background-color: #f1f8ff;
+}
+
+#miniCalendar {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.2em;
+}
+
+.fc .fc-button {
+    padding: 0.2em 0.4em;
+    font-size: 0.9em;
+}
+
+/* Estilos para el menú */
+#menuItems {
+    font-size: 0.9em;
+}
+
+#menuItems .badge {
+    font-size: 0.75em;
+    margin-left: 5px;
+}
+
+#menuItems .text-primary {
+    font-size: 0.95em;
+}
+
+/* Estilos para la tabla de pedidos */
+#ordersTable {
+    color: #000000; /* Texto negro para mejor contraste */
+    font-size: 0.9rem; /* Tamaño de fuente ligeramente más pequeño */
+}
+
+#ordersTable td {
+    vertical-align: middle; /* Centrar verticalmente el contenido */
+    padding: 0.5rem 0.75rem; /* Ajustar el padding de las celdas */
+}
+
+/* Mejorar la legibilidad de los textos en las celdas */
+#ordersTable td:first-child {
+    font-weight: 500; /* Hacer el texto del cliente un poco más grueso */
+}
+
+/* Asegurar que los precios tengan un ancho fijo y estén alineados a la derecha */
+#ordersTable td:nth-child(3) {
+    text-align: right;
+    white-space: nowrap;
+}

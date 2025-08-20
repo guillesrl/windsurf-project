@@ -125,18 +125,22 @@ async function loadReservations() {
         }
         
         // Process each reservation
+        console.log('Processing reservations:', data); // Debug log
         data.forEach(reservation => {
+            console.log('Processing reservation:', reservation); // Debug log
             try {
                 const row = document.createElement('tr');
                 const time = reservation.start ? formatTime(new Date(reservation.start.dateTime || reservation.start.date)) : '--:--';
                 const name = reservation.summary || 'Sin nombre';
                 const description = reservation.description || '';
                 
+                // Creamos el contenido HTML de la fila
                 row.innerHTML = `
                     <td class="text-nowrap">${time}</td>
                     <td>${name}</td>
                     <td>${description}</td>
                 `;
+                
                 reservationsTable.appendChild(row);
             } catch (error) {
                 console.error('Error processing reservation:', reservation, error);
@@ -154,15 +158,14 @@ async function loadReservations() {
     }
 }
 
-// Helper function to format time
+// Helper function to format time in 24h format
 function formatTime(dateStr) {
     try {
         const date = new Date(dateStr);
-        return date.toLocaleTimeString('es-ES', { 
-            hour: '2-digit', 
-            minute: '2-digit',
-            hour12: true 
-        });
+        // Formato 24 horas con ceros a la izquierda
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}hs`;
     } catch (e) {
         console.error('Error formatting time:', e);
         return '--:--';
@@ -175,8 +178,8 @@ function getStatusBadgeClass(status) {
     
     const statusMap = {
         'completado': 'success',
-        'en proceso': 'warning',
-        'pendiente': 'secondary',
+        'en proceso': 'info',
+        'pendiente': 'warning text-dark',  // Amarillo oscuro con texto oscuro
         'cancelado': 'danger'
     };
     return statusMap[status.toLowerCase()] || 'secondary';
