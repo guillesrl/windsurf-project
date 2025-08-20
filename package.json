@@ -1,0 +1,10 @@
+{
+  "name": "windsurf-project",
+  "version": "1.0.0",
+  "description": "Windsurf Project",
+  "scripts": {
+    "vercel-build": "pip install -r requirements.txt"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
