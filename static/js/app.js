@@ -95,11 +95,19 @@ async function loadOrders() {
             return;
         }
         
-        data.slice(0, 10).forEach(order => {
+        data.slice(0, 10).forEach((order, index) => {
             const row = document.createElement('tr');
+            const foodText = order.Comida || '';
+            const shortFood = foodText.length > 20 ? foodText.substring(0, 20) + '...' : foodText;
+            const clientName = order.Cliente || order.client || order.customer || order.nombre || order.name || order.Client || order.Customer || order.Nombre || `Cliente ${index + 1}`;
+            
             row.innerHTML = `
-                <td>${order.Nombre || 'N/A'}</td>
-                <td>${order.Comida || ''}</td>
+                <td>${clientName}</td>
+                <td>
+                    <span class="food-short">${shortFood}</span>
+                    <span class="food-full" style="display: none;">${foodText}</span>
+                    ${foodText.length > 20 ? '<button class="btn btn-sm ms-1" style="font-size: 0.65rem; padding: 0.1rem 0.3rem;" onclick="toggleFood(this)">Mostrar</button>' : ''}
+                </td>
                 <td class="text-end">${order.Total ? `$${parseFloat(order.Total).toFixed(2)}` : ''}</td>
                 <td><span class="badge bg-${getStatusBadgeClass(order.Estado)}">${order.Estado || 'Pendiente'}</span></td>
             `;
@@ -293,6 +301,23 @@ function formatPrice(price) {
     if (price == null) return '';
     const num = typeof price === 'string' ? parseFloat(price.replace(',', '.')) : Number(price);
     return isNaN(num) ? '' : `$${num.toFixed(2).replace('.', ',')}`;
+}
+
+// Toggle food text visibility
+function toggleFood(button) {
+    const cell = button.parentElement;
+    const shortSpan = cell.querySelector('.food-short');
+    const fullSpan = cell.querySelector('.food-full');
+    
+    if (shortSpan.style.display === 'none') {
+        shortSpan.style.display = 'inline';
+        fullSpan.style.display = 'none';
+        button.textContent = 'Mostrar';
+    } else {
+        shortSpan.style.display = 'none';
+        fullSpan.style.display = 'inline';
+        button.textContent = 'Ocultar';
+    }
 }
 
 function getStatusBadgeClass(status) {
