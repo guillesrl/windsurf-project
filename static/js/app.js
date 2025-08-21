@@ -27,12 +27,119 @@ function setupDarkMode() {
     });
 }
 
+// Función para manejar el colapso del menú
+function setupMenuToggle() {
+    const menuToggle = document.getElementById('menuToggle');
+    const menuCollapse = document.getElementById('menuCollapse');
+    
+    if (menuToggle && menuCollapse) {
+        // Escuchar eventos de Bootstrap collapse
+        menuCollapse.addEventListener('show.bs.collapse', function () {
+            const icon = menuToggle.querySelector('i');
+            if (icon) {
+                icon.className = 'bi bi-chevron-up';
+            }
+        });
+        
+        menuCollapse.addEventListener('hide.bs.collapse', function () {
+            const icon = menuToggle.querySelector('i');
+            if (icon) {
+                icon.className = 'bi bi-chevron-down';
+            }
+        });
+    }
+}
+
+// Función para configurar el selector de fecha y calendario
+function setupDateSelector() {
+    const dateSelector = document.getElementById('dateSelector');
+    const reservationsTitle = document.getElementById('reservationsTitle');
+    
+    if (dateSelector) {
+        // Establecer la fecha de hoy por defecto
+        const today = new Date().toISOString().split('T')[0];
+        dateSelector.value = today;
+        
+        // Escuchar cambios en el selector de fecha
+        dateSelector.addEventListener('change', function() {
+            const selectedDate = this.value;
+            if (selectedDate) {
+                // Actualizar el título
+                updateReservationsTitle(selectedDate);
+                // Cargar reservas para la fecha seleccionada
+                loadReservations(selectedDate).catch(e => 
+                    console.error('Error cargando reservas para fecha:', selectedDate, e)
+                );
+            }
+        });
+    }
+}
+
+// Función para actualizar el título de las reservas según la fecha
+function updateReservationsTitle(dateString) {
+    const reservationsTitle = document.getElementById('reservationsTitle');
+    if (!reservationsTitle) return;
+    
+    const selectedDate = new Date(dateString + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+    
+    if (selectedDate.getTime() === today.getTime()) {
+        reservationsTitle.textContent = 'Reservas de hoy';
+    } else {
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        const formattedDate = selectedDate.toLocaleDateString('es-ES', options);
+        reservationsTitle.textContent = `Reservas del ${formattedDate}`;
+    }
+}
+
+// Función para generar los horarios del restaurante
+function generateRestaurantTimeSlots() {
+    const timeSlots = [];
+    
+    // Horario de almuerzo: 12:00-15:00 (cada 1 hora)
+    for (let hour = 12; hour <= 14; hour++) {
+        timeSlots.push(`${hour.toString().padStart(2, '0')}:00`);
+    }
+    
+    // Horario de cena: 19:00-21:00 (cada 1 hora)
+    for (let hour = 19; hour <= 20; hour++) {
+        timeSlots.push(`${hour.toString().padStart(2, '0')}:00`);
+    }
+    
+    return timeSlots;
+}
+
+// Función para verificar si un horario está ocupado
+function isTimeSlotOccupied(timeSlot, reservations) {
+    return reservations.some(reservation => {
+        if (!reservation.start) return false;
+        
+        const reservationTime = formatTime(new Date(reservation.start.dateTime || reservation.start.date));
+        const slotTime = `${timeSlot}hs`;
+        
+        return reservationTime === slotTime;
+    });
+}
+
 // Initialize the dashboard when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM completamente cargado');
     
     // Configurar el modo oscuro
     setupDarkMode();
+    
+    // Configurar el toggle del menú
+    setupMenuToggle();
+    
+    // Configurar el selector de fecha
+    setupDateSelector();
     
     // Load initial data
     console.log('Cargando pedidos...');
@@ -366,14 +473,14 @@ async function loadMenu() {
     }
 }
 
-// Load reservations for today
-async function loadReservations() {
+// Load reservations for a specific date (defaults to today)
+async function loadReservations(selectedDate = null) {
     const reservationsTable = document.getElementById('todayReservations');
     if (!reservationsTable) return;
     
     try {
-        const today = new Date().toISOString().split('T')[0];
-        const response = await fetch(`/api/reservations?date=${today}`);
+        const date = selectedDate || new Date().toISOString().split('T')[0];
+        const response = await fetch(`/api/reservations?date=${date}`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -382,35 +489,74 @@ async function loadReservations() {
         const data = await response.json();
         reservationsTable.innerHTML = '';
         
-        // Check if data is an array and has items
-        if (!Array.isArray(data) || data.length === 0) {
+        // Obtener todos los horarios del restaurante
+        const allTimeSlots = generateRestaurantTimeSlots();
+        const reservations = Array.isArray(data) ? data : [];
+        
+        // Crear un mapa de todas las reservas y horarios disponibles
+        const timeSlotMap = new Map();
+        
+        // Agregar horarios disponibles
+        allTimeSlots.forEach(timeSlot => {
+            timeSlotMap.set(timeSlot, {
+                time: `${timeSlot}hs`,
+                name: 'Disponible',
+                description: 'Horario libre para reservas',
+                isAvailable: true
+            });
+        });
+        
+        // Sobrescribir con reservas existentes
+        reservations.forEach(reservation => {
+            try {
+                if (reservation.start) {
+                    const reservationTime = formatTime(new Date(reservation.start.dateTime || reservation.start.date));
+                    const timeSlot = reservationTime.replace('hs', '');
+                    
+                    if (timeSlotMap.has(timeSlot)) {
+                        timeSlotMap.set(timeSlot, {
+                            time: reservationTime,
+                            name: reservation.summary || 'Sin nombre',
+                            description: reservation.description || '',
+                            isAvailable: false
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error processing reservation:', reservation, error);
+            }
+        });
+        
+        // Ordenar por hora y mostrar en la tabla
+        const sortedSlots = Array.from(timeSlotMap.entries())
+            .sort(([a], [b]) => a.localeCompare(b));
+        
+        if (sortedSlots.length === 0) {
             const row = document.createElement('tr');
-            row.innerHTML = '<td colspan="3" class="text-center py-2">No hay reservas para hoy</td>';
+            row.innerHTML = '<td colspan="3" class="text-center py-2">No hay horarios disponibles</td>';
             reservationsTable.appendChild(row);
             return;
         }
         
-        // Process each reservation
-        console.log('Processing reservations:', data); // Debug log
-        data.forEach(reservation => {
-            console.log('Processing reservation:', reservation); // Debug log
-            try {
-                const row = document.createElement('tr');
-                const time = reservation.start ? formatTime(new Date(reservation.start.dateTime || reservation.start.date)) : '--:--';
-                const name = reservation.summary || 'Sin nombre';
-                const description = reservation.description || '';
-                
-                // Creamos el contenido HTML de la fila
+        sortedSlots.forEach(([timeSlot, slotData]) => {
+            const row = document.createElement('tr');
+            
+            if (slotData.isAvailable) {
+                row.className = 'table-success available-slot';
                 row.innerHTML = `
-                    <td class="text-nowrap">${time}</td>
-                    <td>${name}</td>
-                    <td>${description}</td>
+                    <td class="text-nowrap">${slotData.time}</td>
+                    <td class="text-muted fst-italic">${slotData.name}</td>
+                    <td class="text-muted small">${slotData.description}</td>
                 `;
-                
-                reservationsTable.appendChild(row);
-            } catch (error) {
-                console.error('Error processing reservation:', reservation, error);
+            } else {
+                row.innerHTML = `
+                    <td class="text-nowrap">${slotData.time}</td>
+                    <td>${slotData.name}</td>
+                    <td>${slotData.description}</td>
+                `;
             }
+            
+            reservationsTable.appendChild(row);
         });
         
     } catch (error) {

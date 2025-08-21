@@ -52,10 +52,12 @@ h6 { font-size: 0.9rem; }
 }
 
 #menuItems > div {
-    padding: 0.3rem 0.25rem; /* Reducir padding vertical */
-    margin-bottom: 0.2rem; /* Espaciado entre elementos */
-    border-radius: 4px; /* Bordes redondeados */
-    transition: background-color 0.2s; /* Transición suave */
+    padding: 0.5rem 0.75rem; /* Aumentar padding para mejor contraste */
+    margin-bottom: 0.3rem; /* Espaciado entre elementos */
+    border-radius: 6px; /* Bordes redondeados */
+    background-color: rgba(248, 249, 250, 0.8); /* Fondo sutil en modo claro */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Borde sutil */
+    transition: all 0.2s ease; /* Transición suave */
 }
 
 /* Eliminar bordes entre elementos */
@@ -65,12 +67,39 @@ h6 { font-size: 0.9rem; }
 
 /* Efecto hover sutil */
 #menuItems > div:hover {
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: rgba(13, 110, 253, 0.1);
+    border-color: rgba(13, 110, 253, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Modo oscuro para hover */
 [data-bs-theme="dark"] #menuItems > div:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(110, 168, 254, 0.25) !important;
+    border-color: rgba(110, 168, 254, 0.5) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(110, 168, 254, 0.2);
+}
+
+/* Estilos específicos para modo oscuro en elementos del menú */
+[data-bs-theme="dark"] #menuItems > div {
+    background-color: rgba(73, 80, 87, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #f8f9fa !important;
+}
+
+/* Asegurar que el texto sea visible en modo oscuro */
+[data-bs-theme="dark"] #menuItems > div * {
+    color: #f8f9fa !important;
+}
+
+[data-bs-theme="dark"] #menuItems > div .text-muted {
+    color: #adb5bd !important;
+}
+
+[data-bs-theme="dark"] #menuItems > div .fw-medium {
+    color: #ffffff !important;
+    font-weight: 600 !important;
 }
 
 #menuItems .badge {
@@ -205,18 +234,38 @@ h6 { font-size: 0.9rem; }
     --bs-table-active-color: #fff;
     --bs-table-hover-bg: #323539;
     --bs-table-hover-color: #fff;
-    color: #f8f9fa;
+    color: #f8f9fa !important;
     border-color: #495057;
+}
+
+[data-bs-theme="dark"] .table td {
+    color: #f8f9fa !important;
+}
+
+[data-bs-theme="dark"] .table tbody tr {
+    background-color: #343a40 !important;
 }
 
 [data-bs-theme="dark"] .table thead th {
     background-color: #2c3034;
-    color: #f8f9fa;
+    color: #f8f9fa !important;
     border-bottom-color: #495057;
 }
 
 [data-bs-theme="dark"] .table-hover tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Específico para la tabla de reservas en modo oscuro */
+[data-bs-theme="dark"] #todayReservations td {
+    color: #f8f9fa !important;
+    background-color: #343a40 !important;
+}
+
+[data-bs-theme="dark"] #todayReservations tr:hover td {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 /* Estilos para el precio del menú */
@@ -260,17 +309,162 @@ h6 { font-size: 0.9rem; }
     font-weight: 500;
 }
 
-/* Estilo para la tarjeta del menú */
+/* Estilo para la tarjeta del menú colapsable */
 #menuCard {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    transition: all 0.3s ease;
 }
 
 #menuCard .card-body {
-    flex: 1;
     padding: 1rem;
-    overflow: hidden;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Estilo para el botón de toggle del menú */
+#menuToggle {
+    transition: all 0.2s ease;
+}
+
+#menuToggle:hover {
+    transform: translateY(-1px);
+}
+
+/* Estilos para las tarjetas de pedidos y reservas */
+.h-100 {
+    min-height: 500px;
+}
+
+/* Mejorar la responsividad en pantallas pequeñas */
+@media (max-width: 768px) {
+    .col-md-6 {
+        margin-bottom: 1rem;
+    }
+    
+    #menuCard .card-body {
+        max-height: 300px;
+    }
+    
+    .h-100 {
+        min-height: auto;
+    }
+}
+
+/* Animación suave para el colapso del menú */
+.collapse {
+    transition: height 0.35s ease;
+}
+
+.collapsing {
+    transition: height 0.35s ease;
+}
+
+/* Estilos para el selector de fecha en reservas */
+#dateSelector {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#dateSelector:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Estilos para el botón del calendario */
+.btn:has(.bi-calendar3) {
+    transition: all 0.2s ease;
+}
+
+.btn:has(.bi-calendar3):hover {
+    transform: translateY(-1px);
+}
+
+/* Estilos para el colapso del calendario */
+#calendarCollapse {
+    background-color: #f8f9fa;
+}
+
+#calendarCollapse .card-body {
+    padding: 0.75rem;
+}
+
+/* Modo oscuro para el selector de fecha */
+[data-bs-theme="dark"] #dateSelector {
+    background-color: #343a40;
+    border-color: #495057;
+    color: #f8f9fa;
+}
+
+[data-bs-theme="dark"] #dateSelector:focus {
+    border-color: #6ea8fe;
+    box-shadow: 0 0 0 0.25rem rgba(110, 168, 254, 0.25);
+}
+
+[data-bs-theme="dark"] #calendarCollapse {
+    background-color: #2c3034;
+}
+
+/* Ajustar el título de reservas para que sea más dinámico */
+#reservationsTitle {
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+/* Estilos para horarios disponibles en reservas */
+.available-slot {
+    background-color: #a3e635 !important;
+    border-color: #84cc16 !important;
+}
+
+.available-slot:hover {
+    background-color: #84cc16 !important;
+    cursor: pointer;
+}
+
+.available-slot td {
+    color: #365314 !important;
+    font-weight: 500;
+}
+
+.available-slot .text-muted {
+    color: #4d7c0f !important;
+    opacity: 0.9;
+}
+
+/* Modo oscuro para horarios disponibles */
+[data-bs-theme="dark"] .available-slot {
+    background-color: #22c55e !important;
+    border-color: #16a34a !important;
+}
+
+[data-bs-theme="dark"] .available-slot:hover {
+    background-color: #16a34a !important;
+}
+
+[data-bs-theme="dark"] .available-slot td {
+    color: #dcfce7 !important;
+    font-weight: 500;
+}
+
+[data-bs-theme="dark"] .available-slot .text-muted {
+    color: #bbf7d0 !important;
+    opacity: 0.9;
+}
+
+/* Animación sutil para las filas disponibles */
+.available-slot {
+    transition: all 0.2s ease;
+}
+
+/* Separador visual entre horarios de almuerzo y cena */
+.available-slot:nth-child(6)::after,
+tr:nth-child(6)::after {
+    content: "";
+    display: block;
+    height: 1px;
+    background-color: #dee2e6;
+    margin: 0.25rem 0;
 }
 
 /* Estilos para la tabla de pedidos */
