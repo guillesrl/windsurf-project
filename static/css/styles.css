@@ -1,490 +1,199 @@
-/* Estilos base con tipografía unificada */
+/* Estilos base */
 body {
-    background-color: #f8f9fa;
-    color: #212529;
+    background-color: #f1f3f4;
+    color: #2d3748;
     padding: 20px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.8rem; /* Reducción del 20% desde el tamaño base de 1rem */
-    line-height: 1.5;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    min-height: 100vh;
 }
 
-/* Ajuste de tamaños relativos */
+/* Tipografía */
 h1, h2, h3, h4, h5, h6 {
-    color: #212529;
+    font-weight: 600;
+    color: #1a202c;
 }
+h1 { font-size: 0.875rem; }
 
-h1 { font-size: 1.8rem; }
-h2 { font-size: 1.5rem; }
-h3 { font-size: 1.3rem; }
-h4 { font-size: 1.1rem; }
-h5 { font-size: 1rem; }
-h6 { font-size: 0.9rem; }
-
+/* Cards */
 .card {
-    margin-bottom: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
 }
-
 .card-header {
     font-weight: 600;
-    background-color: #f1f8ff;
-    font-size: 1rem;
+    background-color: #f7fafc;
+    color: #2d3748;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0.625rem 1rem;
 }
 
-#miniCalendar {
-    max-width: 300px;
-    margin: 0 auto;
-}
-
-.fc .fc-toolbar-title {
-    font-size: 1.1em;
-}
-
-.fc .fc-button {
-    padding: 0.2em 0.4em;
-    font-size: 0.8em;
-}
-
-/* Estilos para el menú */
-#menuItems {
-    font-size: 0.95em; /* Aumentar tamaño del texto */
-    padding-right: 0.5rem;
-}
-
+/* Menú */
+#menuItems { font-size: 0.875rem; }
 #menuItems > div {
-    padding: 0.5rem 0.75rem; /* Aumentar padding para mejor contraste */
-    margin-bottom: 0.3rem; /* Espaciado entre elementos */
-    border-radius: 6px; /* Bordes redondeados */
-    background-color: rgba(248, 249, 250, 0.8); /* Fondo sutil en modo claro */
-    border: 1px solid rgba(0, 0, 0, 0.05); /* Borde sutil */
-    transition: all 0.2s ease; /* Transición suave */
+    padding: 0.875rem 1rem;
+    margin-bottom: 0.25rem;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
 }
-
-/* Eliminar bordes entre elementos */
-#menuItems > div {
-    border-bottom: none;
-}
-
-/* Efecto hover sutil */
-#menuItems > div:hover {
-    background-color: rgba(13, 110, 253, 0.1);
-    border-color: rgba(13, 110, 253, 0.2);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Modo oscuro para hover */
-[data-bs-theme="dark"] #menuItems > div:hover {
-    background-color: rgba(110, 168, 254, 0.25) !important;
-    border-color: rgba(110, 168, 254, 0.5) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(110, 168, 254, 0.2);
-}
-
-/* Estilos específicos para modo oscuro en elementos del menú */
-[data-bs-theme="dark"] #menuItems > div {
-    background-color: rgba(73, 80, 87, 0.9) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    color: #f8f9fa !important;
-}
-
-/* Asegurar que el texto sea visible en modo oscuro */
-[data-bs-theme="dark"] #menuItems > div * {
-    color: #f8f9fa !important;
-}
-
-[data-bs-theme="dark"] #menuItems > div .text-muted {
-    color: #adb5bd !important;
-}
-
-[data-bs-theme="dark"] #menuItems > div .fw-medium {
-    color: #ffffff !important;
-    font-weight: 600 !important;
-}
-
-#menuItems .badge {
-    font-size: 0.75em; /* Aumentar tamaño de los badges */
-    margin-left: 5px;
-    vertical-align: middle;
-    padding: 0.2em 0.5em; /* Hacer badges más compactos */
-}
-
-/* Tablas - Estilos unificados */
-.table {
-    font-size: 0.875rem; /* Tamaño de fuente consistente */
-    margin-bottom: 0;
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-/* Encabezados de tabla */
-.table thead th {
-    font-weight: 600;
-    background-color: #f8f9fa;
-    color: #212529;
-    border-bottom: 2px solid #dee2e6;
-    padding: 0.65rem 0.75rem;
-}
-
-/* Celdas de tabla */
-.table td {
-    padding: 0.65rem 0.75rem;
-    vertical-align: middle;
-    border-top: 1px solid #dee2e6;
-}
-
-/* Tabla pequeña */
-.table-sm th,
-.table-sm td {
-    padding: 0.4rem 0.75rem;
-}
-
-/* Tabla con efecto hover */
-.table-hover tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.03);
-}
-
-/* Botones y controles de formulario */
-.btn {
-    font-size: 0.85rem;
-    padding: 0.3rem 0.75rem;
-}
-
-.form-control, .form-select {
-    font-size: 0.85rem;
-    padding: 0.3rem 0.75rem;
-}
-
-/* Badges */
-.badge {
-    font-size: 0.75em;
-    font-weight: 500;
-}
-
-/* Modo oscuro */
-[data-bs-theme="dark"] {
-    background-color: #212529;
-    color: #f8f9fa;
-}
-
-[data-bs-theme="dark"] h1,
-[data-bs-theme="dark"] h2,
-[data-bs-theme="dark"] h3,
-[data-bs-theme="dark"] h4,
-[data-bs-theme="dark"] h5,
-[data-bs-theme="dark"] h6 {
-    color: #f8f9fa;
-}
-
-[data-bs-theme="dark"] .card {
-    background-color: #2c3034;
-    color: #f8f9fa;
-}
-
-[data-bs-theme="dark"] .text-muted {
-    color: #adb5bd !important;
-}
-
-[data-bs-theme="dark"] .card {
-    background-color: #343a40;
-    border-color: #495057;
-}
-
-[data-bs-theme="dark"] .card-header {
-    background-color: #343a40;
-    border-bottom-color: #495057;
-    color: #f8f9fa;
-}
-
-/* Ajustes para el texto en listas y elementos varios */
-[data-bs-theme="dark"] .list-group-item {
-    background-color: #2c3034;
-    border-color: #495057;
-    color: #f8f9fa;
-}
-
-[data-bs-theme="dark"] .text-body {
-    color: #f8f9fa !important;
-}
-
-[data-bs-theme="dark"] .text-muted {
-    color: #adb5bd !important;
-}
-
-/* Ajustes para los badges */
-[data-bs-theme="dark"] .badge.bg-light {
-    color: #212529;
-}
-
-/* Ajustes para los enlaces */
-[data-bs-theme="dark"] a {
-    color: #6ea8fe;
-}
-
-[data-bs-theme="dark"] a:hover {
-    color: #8bb9fe;
-}
-
-[data-bs-theme="dark"] .table {
-    --bs-table-bg: #343a40;
-    --bs-table-striped-bg: #2c3034;
-    --bs-table-striped-color: #f8f9fa;
-    --bs-table-active-bg: #373b3e;
-    --bs-table-active-color: #fff;
-    --bs-table-hover-bg: #323539;
-    --bs-table-hover-color: #fff;
-    color: #f8f9fa !important;
-    border-color: #495057;
-}
-
-[data-bs-theme="dark"] .table td {
-    color: #f8f9fa !important;
-}
-
-[data-bs-theme="dark"] .table tbody tr {
-    background-color: #343a40 !important;
-}
-
-[data-bs-theme="dark"] .table thead th {
-    background-color: #2c3034;
-    color: #f8f9fa !important;
-    border-bottom-color: #495057;
-}
-
-[data-bs-theme="dark"] .table-hover tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    color: #ffffff !important;
-}
-
-/* Específico para la tabla de reservas en modo oscuro */
-[data-bs-theme="dark"] #todayReservations td {
-    color: #f8f9fa !important;
-    background-color: #343a40 !important;
-}
-
-[data-bs-theme="dark"] #todayReservations tr:hover td {
-    color: #ffffff !important;
-    background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Estilos para el precio del menú */
-.menu-price {
-    color: #212529; /* Color oscuro por defecto */
-    font-weight: 600;
-}
-
-[data-bs-theme="dark"] .menu-price {
-    color: #f8f9fa; /* Color claro en modo oscuro */
-}
-
-[data-bs-theme="dark"] .table th,
-[data-bs-theme="dark"] .table td {
-    border-color: #495057;
-}
-
-[data-bs-theme="dark"] .form-control,
-[data-bs-theme="dark"] .form-select {
-    background-color: #343a40;
-    border-color: #495057;
-    color: #f8f9fa;
-}
-
-[data-bs-theme="dark"] .btn-outline-secondary {
-    color: #f8f9fa;
-    border-color: #6c757d;
-}
-
-[data-bs-theme="dark"] .btn-outline-secondary:hover {
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-
-[data-bs-theme="dark"] #menuItems > div {
-    border-bottom-color: #495057;
-}
-
-#menuItems .text-primary {
-    font-size: 0.9em;
-    font-weight: 500;
-}
-
-/* Estilo para la tarjeta del menú colapsable */
-#menuCard {
-    transition: all 0.3s ease;
-}
-
 #menuCard .card-body {
     padding: 1rem;
     max-height: 400px;
     overflow-y: auto;
 }
 
-/* Estilo para el botón de toggle del menú */
-#menuToggle {
-    transition: all 0.2s ease;
+/* Tablas */
+.table-responsive {
+    border-radius: 0;
+    overflow: visible;
+    background: transparent;
+    box-shadow: none;
 }
-
-#menuToggle:hover {
-    transform: translateY(-1px);
+.table {
+    font-size: 0.875rem;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border-collapse: separate;
+    border-spacing: 0;
 }
-
-/* Estilos para las tarjetas de pedidos y reservas */
-.h-100 {
-    min-height: 500px;
-}
-
-/* Mejorar la responsividad en pantallas pequeñas */
-@media (max-width: 768px) {
-    .col-md-6 {
-        margin-bottom: 1rem;
-    }
-    
-    #menuCard .card-body {
-        max-height: 300px;
-    }
-    
-    .h-100 {
-        min-height: auto;
-    }
-}
-
-/* Animación suave para el colapso del menú */
-.collapse {
-    transition: height 0.35s ease;
-}
-
-.collapsing {
-    transition: height 0.35s ease;
-}
-
-/* Estilos para el selector de fecha en reservas */
-#dateSelector {
-    border-radius: 6px;
-    border: 1px solid #ced4da;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-#dateSelector:focus {
-    border-color: #86b7fe;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-/* Estilos para el botón del calendario */
-.btn:has(.bi-calendar3) {
-    transition: all 0.2s ease;
-}
-
-.btn:has(.bi-calendar3):hover {
-    transform: translateY(-1px);
-}
-
-/* Estilos para el colapso del calendario */
-#calendarCollapse {
-    background-color: #f8f9fa;
-}
-
-#calendarCollapse .card-body {
-    padding: 0.75rem;
-}
-
-/* Modo oscuro para el selector de fecha */
-[data-bs-theme="dark"] #dateSelector {
-    background-color: #343a40;
-    border-color: #495057;
-    color: #f8f9fa;
-}
-
-[data-bs-theme="dark"] #dateSelector:focus {
-    border-color: #6ea8fe;
-    box-shadow: 0 0 0 0.25rem rgba(110, 168, 254, 0.25);
-}
-
-[data-bs-theme="dark"] #calendarCollapse {
-    background-color: #2c3034;
-}
-
-/* Ajustar el título de reservas para que sea más dinámico */
-#reservationsTitle {
+.table thead th {
     font-weight: 600;
-    transition: color 0.2s ease;
+    color: #4a5568;
+    border-bottom: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    padding: 0.375rem 0.5rem;
+}
+.table td {
+    padding: 0.375rem 0.5rem;
+    vertical-align: middle;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+.table-sm th, .table-sm td { padding: 0.25rem 0.5rem; }
+
+/* Botones */
+.btn {
+    font-size: 0.875rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+}
+.btn-primary {
+    background-color: #4a5568;
+    border-color: #4a5568;
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #2d3748;
+}
+.btn-outline-secondary {
+    border-color: #cbd5e1;
+    color: #4a5568;
+}
+.btn-outline-secondary:hover {
+    background-color: #f7fafc;
+    color: #2d3748;
 }
 
-/* Estilos para horarios disponibles en reservas */
+/* Formularios */
+.form-control, .form-select {
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    transition: border-color 0.2s ease;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #4a5568;
+    box-shadow: 0 0 0 3px rgba(74, 85, 104, 0.1);
+    outline: none;
+}
+
+/* Horarios disponibles */
 .available-slot {
-    background-color: #a3e635 !important;
-    border-color: #84cc16 !important;
-}
-
-.available-slot:hover {
-    background-color: #84cc16 !important;
+    background-color: #d1fae5 !important;
     cursor: pointer;
 }
-
 .available-slot td {
-    color: #365314 !important;
     font-weight: 500;
 }
 
-.available-slot .text-muted {
-    color: #4d7c0f !important;
-    opacity: 0.9;
+/* Responsive */
+@media (max-width: 768px) {
+    .col-md-5, .col-md-7 { margin-bottom: 1.5rem; }
+    .col-md-6 { margin-bottom: 1rem; }
+    #menuCard .card-body { max-height: 300px; }
+    .h-100 { min-height: auto; }
 }
 
-/* Modo oscuro para horarios disponibles */
+/* MODO OSCURO */
+[data-bs-theme="dark"] {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+[data-bs-theme="dark"] h1, [data-bs-theme="dark"] h2, [data-bs-theme="dark"] h3, 
+[data-bs-theme="dark"] h4, [data-bs-theme="dark"] h5, [data-bs-theme="dark"] h6 {
+    color: #f7fafc;
+}
+[data-bs-theme="dark"] .card {
+    background-color: #2d3748;
+    color: #e2e8f0;
+    border: 1px solid #4a5568;
+}
+[data-bs-theme="dark"] .card-header {
+    background-color: #4a5568;
+    color: #f7fafc;
+}
+[data-bs-theme="dark"] .text-muted { color: #adb5bd !important; }
+[data-bs-theme="dark"] #menuItems > div {
+    background-color: #2d3748 !important;
+    border: 1px solid #4a5568 !important;
+    color: #e2e8f0 !important;
+}
+[data-bs-theme="dark"] #menuItems > div * { color: #f8f9fa !important; }
+[data-bs-theme="dark"] #menuItems > div .text-muted { color: #adb5bd !important; }
+[data-bs-theme="dark"] .table {
+    background-color: transparent;
+    color: #e2e8f0 !important;
+}
+[data-bs-theme="dark"] .table thead th {
+    color: #f7fafc !important;
+    background-color: transparent !important;
+}
+[data-bs-theme="dark"] .table td {
+    color: #e2e8f0 !important;
+    background-color: #2d3748 !important;
+}
+[data-bs-theme="dark"] .btn-outline-secondary {
+    border-color: #718096;
+    color: #a0aec0;
+}
+[data-bs-theme="dark"] .btn-outline-secondary:hover {
+    background-color: #4a5568;
+    color: #f7fafc;
+}
+[data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select {
+    background-color: #4a5568;
+    border-color: #718096;
+    color: #e2e8f0;
+}
+[data-bs-theme="dark"] .form-control:focus, [data-bs-theme="dark"] .form-select:focus {
+    border-color: #a0aec0;
+    box-shadow: 0 0 0 3px rgba(160, 174, 192, 0.1);
+}
 [data-bs-theme="dark"] .available-slot {
-    background-color: #22c55e !important;
-    border-color: #16a34a !important;
+    background-color: #064e3b !important;
 }
-
-[data-bs-theme="dark"] .available-slot:hover {
-    background-color: #16a34a !important;
-}
-
 [data-bs-theme="dark"] .available-slot td {
-    color: #dcfce7 !important;
     font-weight: 500;
-}
-
-[data-bs-theme="dark"] .available-slot .text-muted {
-    color: #bbf7d0 !important;
-    opacity: 0.9;
-}
-
-/* Animación sutil para las filas disponibles */
-.available-slot {
-    transition: all 0.2s ease;
-}
-
-/* Separador visual entre horarios de almuerzo y cena */
-.available-slot:nth-child(6)::after,
-tr:nth-child(6)::after {
-    content: "";
-    display: block;
-    height: 1px;
-    background-color: #dee2e6;
-    margin: 0.25rem 0;
-}
-
-/* Estilos para la tabla de pedidos */
-#ordersTable {
-    color: #000000; /* Texto negro para mejor contraste */
-    font-size: 0.9rem; /* Tamaño de fuente ligeramente más pequeño */
-}
-
-#ordersTable td {
-    vertical-align: middle; /* Centrar verticalmente el contenido */
-    padding: 0.5rem 0.75rem; /* Ajustar el padding de las celdas */
-}
-
-/* Mejorar la legibilidad de los textos en las celdas */
-#ordersTable td:first-child {
-    font-weight: 500; /* Hacer el texto del cliente un poco más grueso */
-}
-
-/* Asegurar que los precios tengan un ancho fijo y estén alineados a la derecha */
-#ordersTable td:nth-child(3) {
-    text-align: right;
-    white-space: nowrap;
 }

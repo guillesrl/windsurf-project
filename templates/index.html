@@ -15,39 +15,57 @@
 <body data-bs-theme="light">
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0">Dashboard de Restaurante</h1>
+            <h1 class="mb-0" style="font-size: 1.5rem;">Dashboard de Restaurante</h1>
             <button id="darkModeToggle" class="btn btn-outline-secondary" aria-label="Cambiar a modo oscuro">
                 <i class="bi bi-moon-fill"></i> Modo Oscuro
             </button>
         </div>
         
-        <!-- Menú colapsable -->
+        <!-- Reservas y Pedidos lado a lado -->
         <div class="row mb-4">
-            <div class="col-12">
-                <div class="card" id="menuCard">
+            <!-- Reservas -->
+            <div class="col-md-5">
+                <div class="card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Menú del Día</span>
-                        <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#menuCollapse" aria-expanded="false" aria-controls="menuCollapse" id="menuToggle">
-                            <i class="bi bi-chevron-down"></i> Mostrar/Ocultar
+                        <span id="reservationsTitle">Reservas de hoy</span>
+                        <button class="btn" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" type="button" data-bs-toggle="collapse" data-bs-target="#calendarCollapse" aria-expanded="false" aria-controls="calendarCollapse">
+                            <i class="bi bi-calendar3"></i> Calendario
                         </button>
                     </div>
-                    <div class="collapse" id="menuCollapse">
-                        <div class="card-body">
-                            <div id="menuItems">
-                                <!-- Los elementos del menú se cargarán aquí -->
+                    <div class="collapse" id="calendarCollapse">
+                        <div class="card-body p-2 border-bottom">
+                            <div class="row">
+                                <div class="col-12">
+                                    <input type="date" id="dateSelector" class="form-control form-control-sm" />
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="todayReservations">
+                                    <!-- Las reservas se cargarán aquí -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Pedidos y Reservas lado a lado -->
-        <div class="row">
             <!-- Pedidos -->
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="card h-100">
-                    <div class="card-header">Últimos Pedidos</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Últimos Pedidos</span>
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-sm">
@@ -67,39 +85,23 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Reservas -->
-            <div class="col-md-6">
-                <div class="card h-100">
+        <!-- Menú colapsable -->
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card" id="menuCard">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span id="reservationsTitle">Reservas de hoy</span>
-                        <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#calendarCollapse" aria-expanded="false" aria-controls="calendarCollapse">
-                            <i class="bi bi-calendar3"></i> Calendario
+                        <span>Menú del Día</span>
+                        <button class="btn" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" type="button" data-bs-toggle="collapse" data-bs-target="#menuCollapse" aria-expanded="false" aria-controls="menuCollapse" id="menuToggle">
+                            <i class="bi bi-chevron-down"></i> Mostrar/Ocultar
                         </button>
                     </div>
-                    <div class="collapse" id="calendarCollapse">
-                        <div class="card-body p-2 border-bottom">
-                            <div class="row">
-                                <div class="col-12">
-                                    <input type="date" id="dateSelector" class="form-control form-control-sm" />
-                                </div>
+                    <div class="collapse" id="menuCollapse">
+                        <div class="card-body">
+                            <div id="menuItems">
+                                <!-- Los elementos del menú se cargarán aquí -->
                             </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-2">
-                        <div class="table-responsive">
-                            <table class="table table-sm table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Hora</th>
-                                        <th>Nombre</th>
-                                        <th>Descripción</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="todayReservations">
-                                    <!-- Las reservas se cargarán aquí -->
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
