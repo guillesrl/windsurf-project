@@ -22,11 +22,12 @@ h1 { font-size: 0.875rem; }
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
 }
 .card-header {
     font-weight: 600;
-    background-color: #f7fafc;
+    background-color: rgba(247, 250, 252, 0.8);
     color: #2d3748;
     border-bottom: 1px solid #e2e8f0;
     padding: 0.625rem 1rem;
@@ -41,10 +42,12 @@ h1 { font-size: 0.875rem; }
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
 }
+.card-body {
+    background: rgba(250, 250, 250, 0.7);
+    backdrop-filter: blur(5px);
+}
 #menuCard .card-body {
     padding: 1rem;
-    max-height: 400px;
-    overflow-y: auto;
 }
 
 /* Tablas */
@@ -58,7 +61,8 @@ h1 { font-size: 0.875rem; }
     font-size: 0.875rem;
     border-radius: 20px;
     overflow: hidden;
-    background: #ffffff;
+    background: rgba(196, 196, 196, 0.9);
+    backdrop-filter: blur(8px);
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     border-collapse: separate;
     border-spacing: 0;
@@ -132,7 +136,6 @@ h1 { font-size: 0.875rem; }
 @media (max-width: 768px) {
     .col-md-5, .col-md-7 { margin-bottom: 1.5rem; }
     .col-md-6 { margin-bottom: 1rem; }
-    #menuCard .card-body { max-height: 300px; }
     .h-100 { min-height: auto; }
 }
 
@@ -146,13 +149,18 @@ h1 { font-size: 0.875rem; }
     color: #f7fafc;
 }
 [data-bs-theme="dark"] .card {
-    background-color: #2d3748;
+    background: rgba(45, 55, 72, 0.85);
+    backdrop-filter: blur(10px);
     color: #e2e8f0;
     border: 1px solid #4a5568;
 }
 [data-bs-theme="dark"] .card-header {
-    background-color: #4a5568;
+    background-color: rgba(74, 85, 104, 0.8);
     color: #f7fafc;
+}
+[data-bs-theme="dark"] .card-body {
+    background: rgba(45, 55, 72, 0.7);
+    backdrop-filter: blur(5px);
 }
 [data-bs-theme="dark"] .text-muted { color: #adb5bd !important; }
 [data-bs-theme="dark"] #menuItems > div {
@@ -163,7 +171,8 @@ h1 { font-size: 0.875rem; }
 [data-bs-theme="dark"] #menuItems > div * { color: #f8f9fa !important; }
 [data-bs-theme="dark"] #menuItems > div .text-muted { color: #adb5bd !important; }
 [data-bs-theme="dark"] .table {
-    background-color: transparent;
+    background: rgba(45, 55, 72, 0.9);
+    backdrop-filter: blur(8px);
     color: #e2e8f0 !important;
 }
 [data-bs-theme="dark"] .table thead th {
