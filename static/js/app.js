@@ -100,90 +100,152 @@ async function loadOrders() {
 
 // Función para obtener todos los platos del menú con paginación
 async function fetchAllMenuItems() {
-    let allItems = [];
+    const allItems = [];
     let page = 1;
+    const limit = 25; // Número de ítems por página
     let hasMorePages = true;
-    const maxPages = 5; // Aumentado para asegurar que se carguen todas las páginas
-    const itemsPerPage = 25; // Aumentar el número de ítems por página
     
     try {
-        while (hasMorePages && page <= maxPages) {
+        console.log('Iniciando carga del menú...');
+        
+        while (hasMorePages) {
             console.log(`Solicitando página ${page} del menú...`);
-            const response = await fetch(`/api/menu?page=${page}&limit=${itemsPerPage}`);
+            const response = await fetch(`/api/menu?page=${page}&limit=${limit}`);
             
             if (!response.ok) {
-                throw new Error(`Error HTTP ${response.status}: ${response.statusText}`);
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(`Error HTTP ${response.status}: ${errorData.error || 'Error desconocido'}`);
             }
             
             const data = await response.json();
-            console.log(`Página ${page} recibida:`, data);
             
-            // Verificar si la respuesta es un array directo o tiene un formato específico
-            const items = Array.isArray(data) ? data : (data.list || data.rows || []);
-            console.log(`Ítems extraídos:`, items);
-            
-            allItems = [...allItems, ...items];
-            
-            // Verificar si hay más páginas basándonos en la respuesta de la API
-            if (data.pageInfo) {
-                // Usar la información de paginación de la API si está disponible
-                const totalPages = Math.ceil(data.pageInfo.totalRows / itemsPerPage);
-                hasMorePages = page < totalPages;
-                console.log(`Página ${page} de ${totalPages} (${data.pageInfo.totalRows} ítems en total)`);
-            } else if (data.pagination) {
-                // Formato alternativo de paginación
-                hasMorePages = data.pagination.page < data.pagination.pageCount;
-                console.log(`Paginación: página ${data.pagination.page} de ${data.pagination.pageCount}`);
+            // Verificar si la respuesta tiene el formato esperado
+            if (data && data.items && Array.isArray(data.items)) {
+                const items = data.items;
+                console.log(`Página ${page}: Se encontraron ${items.length} ítems`);
+                
+                if (items.length === 0) {
+                    console.log('No hay más ítems para cargar');
+                    break;
+                }
+                
+                // Filtrar ítems inválidos
+                const validItems = items.filter(item => {
+                    const isValid = item && 
+                                  (item.Nombre || item['Nombre del plato']) && 
+                                  item['Precio (€)'] !== undefined;
+                    
+                    if (!isValid) {
+                        console.warn('Ítem inválido filtrado:', item);
+                    }
+                    
+                    return isValid;
+                });
+                
+                allItems.push(...validItems);
+                
+                // Verificar si hay más páginas según la respuesta de la API
+                hasMorePages = data.pageInfo ? !data.pageInfo.isLastPage : items.length === limit;
+                
+                console.log(`Página ${page}/${data.pageInfo?.totalPages || '?'} procesada. ` +
+                           `Items válidos: ${validItems.length}/${items.length}. ` +
+                           `Total acumulado: ${allItems.length}`);
+                
+                // Si no hay más páginas, salir del bucle
+                if (!hasMorePages) {
+                    console.log('Se ha alcanzado la última página según la API');
+                    break;
+                }
+                
+                // Prevenir bucles infinitos
+                if (page > 50) {
+                    console.warn('Se alcanzó el límite de páginas (50). Deteniendo la carga.');
+                    break;
+                }
+                
+                page++;
+                
             } else {
-                // Si no hay información de paginación, asumir que es la última página si recibimos menos ítems de los solicitados
-                hasMorePages = items.length === itemsPerPage;
-                console.log(`Recibidos ${items.length} ítems. ${hasMorePages ? 'Posiblemente hay más páginas' : 'Última página'}`);
+                // Si no se encuentra el formato esperado, asumir que es la última página
+                console.warn('Formato de respuesta inesperado:', data);
+                hasMorePages = false;
             }
-            
-            page++;
         }
         
-        console.log(`Se cargaron ${allItems.length} ítems del menú`);
+        console.log(`Carga del menú completada. Total de ítems cargados: ${allItems.length}`);
         return allItems;
+        
     } catch (error) {
         console.error('Error al cargar el menú:', error);
+        
         // Si hay un error, intentar cargar al menos la primera página
         try {
             console.log('Intentando cargar solo la primera página...');
             const response = await fetch('/api/menu?limit=10');
             if (response.ok) {
                 const data = await response.json();
-                return Array.isArray(data) ? data : (data.list || data.rows || []);
+                const items = data.items || data.list || data.rows || [];
+                console.log(`Se cargaron ${items.length} ítems como respaldo`);
+                return Array.isArray(items) ? items : [items];
             }
         } catch (e) {
             console.error('Error al cargar la primera página del menú:', e);
         }
+        
+        // Si todo falla, devolver un array vacío
+        console.warn('No se pudieron cargar los ítems del menú');
         return [];
     }
 }
 
 // Load menu from API
 async function loadMenu() {
+    const menuItems = document.getElementById('menuItems');
+    
     try {
-        console.log('Cargando menú...');
-        const menuItems = document.getElementById('menuItems');
-        menuItems.innerHTML = '<div class="text-center py-3">Cargando menú...</div>';
+        console.log('Iniciando carga del menú...');
+        menuItems.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-2 mb-0">Cargando menú...</p>
+            </div>`;
         
         // Obtener todos los platos
         const allItems = await fetchAllMenuItems();
         console.log('Total de ítems del menú recibidos:', allItems.length);
         
-        // Filtrar y asegurar que no haya duplicados
-        const platosUnicos = [];
-        const idsVistos = new Set();
+        if (!Array.isArray(allItems) || allItems.length === 0) {
+            throw new Error('No se recibieron datos del menú');
+        }
         
-        const platosFiltrados = allItems.filter(item => {
-            if (!item || item['Precio (€)'] === undefined) return false;
+        // Filtrar y asegurar que no haya duplicados
+        const idsVistos = new Set();
+        let platosFiltrados = [];
+        let itemsInvalidos = 0;
+        
+        platosFiltrados = allItems.filter(item => {
+            if (!item) {
+                itemsInvalidos++;
+                return false;
+            }
+            
+            // Verificar campos obligatorios
+            const nombre = item.Nombre || item['Nombre del plato'];
+            const precio = item['Precio (€)'];
+            
+            if (!nombre || precio === undefined) {
+                console.warn('Ítem sin nombre o precio:', item);
+                itemsInvalidos++;
+                return false;
+            }
             
             // Usar ID si existe, de lo contrario usar nombre + precio como identificador único
-            const id = item.Id || `${item.Nombre}_${item['Precio (€)']}`;
+            const id = item.Id || `${nombre}_${precio}`.toLowerCase();
+            
             if (idsVistos.has(id)) {
-                console.log('Plato duplicado detectado y omitido:', item.Nombre || 'Sin nombre');
+                console.log('Plato duplicado detectado y omitido:', nombre);
                 return false;
             }
             
@@ -191,46 +253,116 @@ async function loadMenu() {
             return true;
         });
         
-        console.log(`Platos únicos después de filtrar: ${platosFiltrados.length}`);
+        console.log(`
+            Resumen de carga del menú:
+            - Total recibidos: ${allItems.length}
+            - Válidos: ${platosFiltrados.length}
+            - Inválidos/omitidos: ${itemsInvalidos}
+            - Duplicados: ${allItems.length - itemsInvalidos - platosFiltrados.length}
+        `);
         
         // Limpiar el contenedor
         menuItems.innerHTML = '';
         
         if (platosFiltrados.length > 0) {
-            console.log('Mostrando platos en la interfaz:', platosFiltrados);
-            platosFiltrados.forEach((item, index) => {
+            console.log('Mostrando platos en la interfaz:', platosFiltrados.length, 'ítems');
+            
+            // Crear contenedor para mejor organización
+            const menuContainer = document.createElement('div');
+            menuContainer.className = 'menu-container';
+            
+            // Renderizar cada ítem
+            platosFiltrados.forEach(item => {
                 const menuItem = document.createElement('div');
-                menuItem.className = 'mb-2';
+                menuItem.className = 'menu-item d-flex justify-content-between align-items-center py-1 px-2';
                 
-                console.log(`Procesando plato ${index + 1}:`, item);
-
-                // Determine availability status and corresponding badge
-                let availabilityBadge = ''; // Default to no badge
-                if (item.Stock !== null && typeof item.Stock !== 'undefined') {
-                    const stockValue = parseInt(item.Stock, 10);
+                // Obtener datos del ítem con valores por defecto
+                const nombre = item.Nombre || item['Nombre del plato'] || 'Sin nombre';
+                const descripcion = item.Descripción || item.Descripcion || '';
+                const precio = formatPrice(item['Precio (€)']);
+                
+                // Determinar disponibilidad (solo si Stock no es null/undefined)
+                const stockValue = item.Stock !== null && item.Stock !== undefined 
+                    ? parseInt(item.Stock, 10) 
+                    : null;
+                
+                let availabilityBadge = '';
+                if (stockValue !== null) {
                     const isAvailable = !isNaN(stockValue) && stockValue > 0;
-                    console.log(`Stock para ${item.Nombre || 'sin nombre'}:`, item.Stock, 'Disponible:', isAvailable);
                     availabilityBadge = isAvailable 
-                        ? '<span class="badge bg-success">Disponible</span>' 
-                        : '<span class="badge bg-danger">No Disponible</span>';
+                        ? '<span class="badge bg-success">✓</span>'
+                        : '<span class="badge bg-danger">✗</span>';
                 }
-
+                
+                console.log(`Renderizando: ${nombre} - ${precio} - Stock: ${item.Stock}`);
+                
+                // Construir el HTML del ítem en una sola línea
                 menuItem.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            ${item.Nombre || 'Sin nombre'}
-                        </div>
-                        <div class="text-end">
-                            <span class="text-primary fw-bold">${item['Precio (€)'] ? `$${parseFloat(item['Precio (€)'].replace(',', '.')).toFixed(2)}` : ''}</span>
-                            ${availabilityBadge ? ` ${availabilityBadge}` : ''}
+                    <div class="d-flex align-items-center flex-grow-1 overflow-hidden">
+                        <div class="me-2">${availabilityBadge}</div>
+                        <div class="text-truncate" style="max-width: 65%;">
+                            <span class="fw-medium">${nombre}</span>
+                            ${descripcion ? `<span class="text-muted small ms-2">${descripcion}</span>` : ''}
                         </div>
                     </div>
+                    <div class="text-nowrap ms-2 fw-medium">
+                        ${precio}
+                    </div>
                 `;
-                menuItems.appendChild(menuItem);
+
+                menuContainer.appendChild(menuItem);
             });
+
+            menuItems.appendChild(menuContainer);
+
+            
+            // Mostrar resumen de carga
+            const summary = document.createElement('div');
+            summary.className = 'small text-muted text-end mt-2';
+            summary.textContent = `Mostrando ${platosFiltrados.length} de ${allItems.length} ítems`;
+            if (itemsInvalidos > 0) {
+                summary.textContent += ` (${itemsInvalidos} omitidos por falta de datos)`;
+            }
+            menuItems.appendChild(summary);
+            
+        } else {
+            menuItems.innerHTML = `
+                <div class="alert alert-warning mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    No se encontraron platos en el menú con los criterios actuales.
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-primary" onclick="loadMenu()">
+                            <i class="bi bi-arrow-clockwise me-1"></i> Reintentar
+                        </button>
+                    </div>
+                </div>`;
         }
     } catch (error) {
         console.error('Error loading menu:', error);
+        const menuItems = document.getElementById('menuItems');
+        if (menuItems) {
+            let errorMessage = 'Error al cargar el menú. ';
+            
+            if (error.message && error.message.includes('Failed to fetch')) {
+                errorMessage += 'No se pudo conectar con el servidor. Verifique su conexión a Internet.';
+            } else if (error.message) {
+                errorMessage += error.message;
+            }
+            
+            menuItems.innerHTML = `
+                <div class="alert alert-danger mb-0">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-octagon-fill me-2"></i>
+                        <div>
+                            <div class="fw-bold">Error al cargar el menú</div>
+                            <div class="mb-2">${errorMessage}</div>
+                            <button class="btn btn-sm btn-outline-primary" onclick="loadMenu()">
+                                <i class="bi bi-arrow-clockwise me-1"></i> Reintentar
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+        }
     }
 }
 
@@ -304,6 +436,21 @@ function formatTime(dateStr) {
         console.error('Error formatting time:', e);
         return '--:--';
     }
+}
+
+// Helper function to format price
+function formatPrice(price) {
+    if (price === undefined || price === null) return '';
+    
+    // Convertir a número, manejando tanto punto como coma decimal
+    const num = typeof price === 'string' 
+        ? parseFloat(price.replace(',', '.')) 
+        : Number(price);
+        
+    if (isNaN(num)) return '';
+    
+    // Formatear a 2 decimales y reemplazar punto por coma si es necesario
+    return `$${num.toFixed(2).replace('.', ',')}`;
 }
 
 // Helper function to get badge class based on status

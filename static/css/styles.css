@@ -1,6 +1,7 @@
 /* Estilos base con tipografía unificada */
 body {
     background-color: #f8f9fa;
+    color: #212529;
     padding: 20px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.8rem; /* Reducción del 20% desde el tamaño base de 1rem */
@@ -8,6 +9,10 @@ body {
 }
 
 /* Ajuste de tamaños relativos */
+h1, h2, h3, h4, h5, h6 {
+    color: #212529;
+}
+
 h1 { font-size: 1.8rem; }
 h2 { font-size: 1.5rem; }
 h3 { font-size: 1.3rem; }
@@ -42,23 +47,37 @@ h6 { font-size: 0.9rem; }
 
 /* Estilos para el menú */
 #menuItems {
-    font-size: 0.85em;
+    font-size: 0.95em; /* Aumentar tamaño del texto */
     padding-right: 0.5rem;
 }
 
 #menuItems > div {
-    padding: 0.5rem 0.25rem;
-    border-bottom: 1px solid #eee;
+    padding: 0.3rem 0.25rem; /* Reducir padding vertical */
+    margin-bottom: 0.2rem; /* Espaciado entre elementos */
+    border-radius: 4px; /* Bordes redondeados */
+    transition: background-color 0.2s; /* Transición suave */
 }
 
-#menuItems > div:last-child {
+/* Eliminar bordes entre elementos */
+#menuItems > div {
     border-bottom: none;
 }
 
+/* Efecto hover sutil */
+#menuItems > div:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Modo oscuro para hover */
+[data-bs-theme="dark"] #menuItems > div:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
 #menuItems .badge {
-    font-size: 0.7em;
+    font-size: 0.75em; /* Aumentar tamaño de los badges */
     margin-left: 5px;
     vertical-align: middle;
+    padding: 0.2em 0.5em; /* Hacer badges más compactos */
 }
 
 /* Tablas - Estilos unificados */
@@ -120,15 +139,62 @@ h6 { font-size: 0.9rem; }
     color: #f8f9fa;
 }
 
+[data-bs-theme="dark"] h1,
+[data-bs-theme="dark"] h2,
+[data-bs-theme="dark"] h3,
+[data-bs-theme="dark"] h4,
+[data-bs-theme="dark"] h5,
+[data-bs-theme="dark"] h6 {
+    color: #f8f9fa;
+}
+
+[data-bs-theme="dark"] .card {
+    background-color: #2c3034;
+    color: #f8f9fa;
+}
+
+[data-bs-theme="dark"] .text-muted {
+    color: #adb5bd !important;
+}
+
 [data-bs-theme="dark"] .card {
     background-color: #343a40;
     border-color: #495057;
 }
 
 [data-bs-theme="dark"] .card-header {
-    background-color: #2c3034;
+    background-color: #343a40;
     border-bottom-color: #495057;
     color: #f8f9fa;
+}
+
+/* Ajustes para el texto en listas y elementos varios */
+[data-bs-theme="dark"] .list-group-item {
+    background-color: #2c3034;
+    border-color: #495057;
+    color: #f8f9fa;
+}
+
+[data-bs-theme="dark"] .text-body {
+    color: #f8f9fa !important;
+}
+
+[data-bs-theme="dark"] .text-muted {
+    color: #adb5bd !important;
+}
+
+/* Ajustes para los badges */
+[data-bs-theme="dark"] .badge.bg-light {
+    color: #212529;
+}
+
+/* Ajustes para los enlaces */
+[data-bs-theme="dark"] a {
+    color: #6ea8fe;
+}
+
+[data-bs-theme="dark"] a:hover {
+    color: #8bb9fe;
 }
 
 [data-bs-theme="dark"] .table {
@@ -151,6 +217,16 @@ h6 { font-size: 0.9rem; }
 
 [data-bs-theme="dark"] .table-hover tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Estilos para el precio del menú */
+.menu-price {
+    color: #212529; /* Color oscuro por defecto */
+    font-weight: 600;
+}
+
+[data-bs-theme="dark"] .menu-price {
+    color: #f8f9fa; /* Color claro en modo oscuro */
 }
 
 [data-bs-theme="dark"] .table th,
