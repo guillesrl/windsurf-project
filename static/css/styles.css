@@ -18,7 +18,7 @@ h1 { font-size: 0.875rem; }
 
 /* Cards */
 .card {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     border: 1px solid #e2e8f0;
     border-radius: 12px;
@@ -45,9 +45,10 @@ h1 { font-size: 0.875rem; }
 .card-body {
     background: rgba(250, 250, 250, 0.7);
     backdrop-filter: blur(5px);
+    padding: 0.75rem;
 }
 #menuCard .card-body {
-    padding: 1rem;
+    padding: 0.75rem;
 }
 
 /* Tablas */
@@ -134,8 +135,8 @@ h1 { font-size: 0.875rem; }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .col-md-5, .col-md-7 { margin-bottom: 1.5rem; }
-    .col-md-6 { margin-bottom: 1rem; }
+    .col-md-5, .col-md-7 { margin-bottom: 1rem; }
+    .col-md-6 { margin-bottom: 0.75rem; }
     .h-100 { min-height: auto; }
 }
 
