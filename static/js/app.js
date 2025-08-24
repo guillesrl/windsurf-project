@@ -228,10 +228,10 @@ async function loadReservations(selectedDate = null) {
         const data = await response.json();
         const reservations = Array.isArray(data) ? data : [];
         
-        // Generate time slots
+        // Horarios Restaurante
         const slots = [];
-        for (let h = 12; h <= 14; h++) slots.push(`${h.toString().padStart(2, '0')}:00`);
-        for (let h = 19; h <= 20; h++) slots.push(`${h.toString().padStart(2, '0')}:00`);
+        for (let h = 12; h <= 15; h++) slots.push(`${h.toString().padStart(2, '0')}:00`);
+        for (let h = 19; h <= 21; h++) slots.push(`${h.toString().padStart(2, '0')}:00`);
         
         const slotMap = new Map();
         slots.forEach(slot => {
