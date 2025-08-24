@@ -93,33 +93,41 @@ async function loadOrders() {
         table.innerHTML = '';
         
         if (!Array.isArray(data) || data.length === 0) {
-            table.innerHTML = '<tr><td colspan="4" class="text-center py-2">No hay pedidos recientes</td></tr>';
+            table.innerHTML = '<div class="text-center py-2">No hay pedidos recientes</div>';
             return;
         }
         
         data.slice(0, 10).forEach((order, index) => {
-            const row = document.createElement('tr');
+            const div = document.createElement('div');
+            div.className = 'px-1 py-0 mb-1 border-bottom';
+            
             const foodText = order.Comida || '';
             const shortFood = foodText.length > 20 ? foodText.substring(0, 20) + '...' : foodText;
             const clientName = order.Cliente || order.client || order.customer || order.nombre || order.name || order.Client || order.Customer || order.Nombre || `Cliente ${index + 1}`;
             
-            row.innerHTML = `
-                <td>${clientName}</td>
-                <td>
-                    <span class="food-short">${shortFood}</span>
-                    <span class="food-full" style="display: none;">${foodText}</span>
-                    ${foodText.length > 20 ? '<button class="btn btn-sm ms-1" style="font-size: 0.65rem; padding: 0.1rem 0.3rem;" onclick="toggleFood(this)">Mostrar</button>' : ''}
-                </td>
-                <td class="text-end">${order.Total ? `$${parseFloat(order.Total).toFixed(2)}` : ''}</td>
-                <td><span class="badge bg-${getStatusBadgeClass(order.Estado)}">${order.Estado || 'Pendiente'}</span></td>
+            div.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center flex-grow-1">
+                        <div class="fw-bold me-2">${clientName}</div>
+                        <div class="text-muted flex-grow-1">
+                            <span class="food-short">${shortFood}</span>
+                            <span class="food-full" style="display: none;">${foodText}</span>
+                            ${foodText.length > 20 ? '<button class="btn btn-sm ms-1" style="font-size: 0.7rem; padding: 0.1rem 0.3rem;" onclick="toggleFood(this)">Mostrar</button>' : ''}
+                        </div>
+                    </div>
+                    <div class="text-end ms-2">
+                        <span class="me-2">${order.Total ? `$${parseFloat(order.Total).toFixed(2)}` : ''}</span>
+                        <span class="badge bg-${getStatusBadgeClass(order.Estado)}">${order.Estado || 'Pendiente'}</span>
+                    </div>
+                </div>
             `;
-            table.appendChild(row);
+            table.appendChild(div);
         });
         
     } catch (error) {
         console.error('Error loading orders:', error);
         document.getElementById('ordersTable').innerHTML = 
-            '<tr><td colspan="4" class="text-center text-danger py-2">Error al cargar pedidos</td></tr>';
+            '<div class="text-center text-danger py-2">Error al cargar pedidos</div>';
     }
 }
 
@@ -265,27 +273,37 @@ async function loadReservations(selectedDate = null) {
         const sorted = Array.from(slotMap.entries()).sort(([a], [b]) => a.localeCompare(b));
         
         sorted.forEach(([, slot]) => {
-            const row = document.createElement('tr');
+            const div = document.createElement('div');
+            div.className = 'px-1 py-0 mb-1 border-bottom';
+            
             if (slot.available) {
-                row.className = 'available-slot';
-                row.innerHTML = `
-                    <td>${slot.time}</td>
-                    <td class="text-muted small"><span class="badge bg-success">${slot.name}</span></td>
-                    <td class="text-muted small">${slot.description}</td>
+                div.classList.add('available-slot');
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center flex-grow-1">
+                            <div class="fw-bold me-2">${slot.time}</div>
+                            <div class="text-muted">${slot.description}</div>
+                        </div>
+                        <span class="badge bg-success ms-2">${slot.name}</span>
+                    </div>
                 `;
             } else {
-                row.innerHTML = `
-                    <td>${slot.time}</td>
-                    <td>${slot.name}</td>
-                    <td>${slot.description}</td>
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center flex-grow-1">
+                            <div class="fw-bold me-2">${slot.time}</div>
+                            <div class="text-muted">${slot.description}</div>
+                        </div>
+                        <div class="ms-2">${slot.name}</div>
+                    </div>
                 `;
             }
-            table.appendChild(row);
+            table.appendChild(div);
         });
         
     } catch (error) {
         console.error('Error loading reservations:', error);
-        table.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-2">Error al cargar reservas</td></tr>';
+        table.innerHTML = '<div class="text-center text-danger py-2">Error al cargar reservas</div>';
     }
 }
 
