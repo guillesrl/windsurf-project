@@ -74,6 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
     setupDarkMode();
     setupMenuToggle();
     setupDateSelector();
+    setupHideToggles();
+    setupCollapseToggles();
     
     loadOrders().catch(e => console.error('Error loading orders:', e));
     loadMenu().catch(e => console.error('Error loading menu:', e));
@@ -268,7 +270,7 @@ async function loadReservations(selectedDate = null) {
                 row.className = 'available-slot';
                 row.innerHTML = `
                     <td>${slot.time}</td>
-                    <td class="text-muted fst-italic">${slot.name}</td>
+                    <td class="text-muted small"><span class="badge bg-success">${slot.name}</span></td>
                     <td class="text-muted small">${slot.description}</td>
                 `;
             } else {
@@ -317,6 +319,82 @@ function toggleFood(button) {
         shortSpan.style.display = 'none';
         fullSpan.style.display = 'inline';
         button.textContent = 'Ocultar';
+    }
+}
+
+// Hide/Show toggles
+function setupHideToggles() {
+    const hideReservationsToggle = document.getElementById('hideReservationsToggle');
+    const hideOrdersToggle = document.getElementById('hideOrdersToggle');
+    const hideMenuToggle = document.getElementById('hideMenuToggle');
+    const reservationsSection = document.getElementById('reservationsSection');
+    const ordersSection = document.getElementById('ordersSection');
+    const menuSection = document.getElementById('menuSection');
+    
+    if (hideReservationsToggle && reservationsSection) {
+        hideReservationsToggle.addEventListener('click', () => {
+            const isHidden = reservationsSection.style.display === 'none';
+            reservationsSection.style.display = isHidden ? 'block' : 'none';
+            hideReservationsToggle.innerHTML = isHidden 
+                ? '<i class="bi bi-eye-slash"></i> Ocultar Reservas'
+                : '<i class="bi bi-eye"></i> Mostrar Reservas';
+        });
+    }
+    
+    if (hideOrdersToggle && ordersSection) {
+        hideOrdersToggle.addEventListener('click', () => {
+            const isHidden = ordersSection.style.display === 'none';
+            ordersSection.style.display = isHidden ? 'block' : 'none';
+            hideOrdersToggle.innerHTML = isHidden 
+                ? '<i class="bi bi-eye-slash"></i> Ocultar Pedidos'
+                : '<i class="bi bi-eye"></i> Mostrar Pedidos';
+        });
+    }
+    
+    if (hideMenuToggle && menuSection) {
+        hideMenuToggle.addEventListener('click', () => {
+            const isHidden = menuSection.style.display === 'none';
+            menuSection.style.display = isHidden ? 'block' : 'none';
+            hideMenuToggle.innerHTML = isHidden 
+                ? '<i class="bi bi-eye-slash"></i> Ocultar Menú'
+                : '<i class="bi bi-eye"></i> Mostrar Menú';
+        });
+    }
+}
+
+// Collapse toggles for individual cards
+function setupCollapseToggles() {
+    const reservationsToggle = document.getElementById('reservationsToggle');
+    const ordersToggle = document.getElementById('ordersToggle');
+    const reservationsCollapse = document.getElementById('reservationsCollapse');
+    const ordersCollapse = document.getElementById('ordersCollapse');
+    
+    if (reservationsToggle && reservationsCollapse) {
+        reservationsCollapse.addEventListener('show.bs.collapse', () => {
+            const icon = reservationsToggle.querySelector('i');
+            if (icon) icon.className = 'bi bi-chevron-up';
+            reservationsToggle.innerHTML = '<i class="bi bi-chevron-up"></i> Ocultar';
+        });
+        
+        reservationsCollapse.addEventListener('hide.bs.collapse', () => {
+            const icon = reservationsToggle.querySelector('i');
+            if (icon) icon.className = 'bi bi-chevron-down';
+            reservationsToggle.innerHTML = '<i class="bi bi-chevron-down"></i> Mostrar';
+        });
+    }
+    
+    if (ordersToggle && ordersCollapse) {
+        ordersCollapse.addEventListener('show.bs.collapse', () => {
+            const icon = ordersToggle.querySelector('i');
+            if (icon) icon.className = 'bi bi-chevron-up';
+            ordersToggle.innerHTML = '<i class="bi bi-chevron-up"></i> Ocultar';
+        });
+        
+        ordersCollapse.addEventListener('hide.bs.collapse', () => {
+            const icon = ordersToggle.querySelector('i');
+            if (icon) icon.className = 'bi bi-chevron-down';
+            ordersToggle.innerHTML = '<i class="bi bi-chevron-down"></i> Mostrar';
+        });
     }
 }
 
