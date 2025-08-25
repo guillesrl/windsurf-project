@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Restaurante</title>
+    <title>Dashboard Restaurante</title>
     <!-- Favicon -->
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
     <link rel="alternate icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
@@ -15,17 +15,8 @@
 <body data-bs-theme="light">
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0" style="font-size: 1.5rem;">Dashboard de Restaurante</h1>
+            <h5 class="mb-0">Dashboard Restaurante 🍽</h5>
             <div class="d-flex gap-2">
-                <button id="hideReservationsToggle" class="btn btn-outline-secondary btn-sm" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
-                    <i class="bi bi-eye-slash"></i> Ocultar Reservas
-                </button>
-                <button id="hideOrdersToggle" class="btn btn-outline-secondary btn-sm" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
-                    <i class="bi bi-eye-slash"></i> Ocultar Pedidos
-                </button>
-                <button id="hideMenuToggle" class="btn btn-outline-secondary btn-sm" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
-                    <i class="bi bi-eye-slash"></i> Ocultar Menú
-                </button>
                 <button id="darkModeToggle" class="btn btn-outline-secondary" aria-label="Cambiar a modo oscuro">
                     <i class="bi bi-moon-fill"></i> Modo Oscuro
                 </button>
@@ -39,14 +30,9 @@
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span id="reservationsTitle">Reservas de hoy</span>
-                        <div class="d-flex gap-1">
-                            <button class="btn" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" type="button" data-bs-toggle="collapse" data-bs-target="#calendarCollapse" aria-expanded="false" aria-controls="calendarCollapse">
-                                <i class="bi bi-calendar3"></i> Calendario
-                            </button>
-                            <button class="btn" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" type="button" data-bs-toggle="collapse" data-bs-target="#reservationsCollapse" aria-expanded="true" aria-controls="reservationsCollapse" id="reservationsToggle">
-                                <i class="bi bi-chevron-up"></i> Ocultar
-                            </button>
-                        </div>
+                        <button class="btn" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" type="button" data-bs-toggle="collapse" data-bs-target="#calendarCollapse" aria-expanded="false" aria-controls="calendarCollapse">
+                            <i class="bi bi-calendar3"></i> Calendario
+                        </button>
                     </div>
                     <div class="collapse" id="calendarCollapse">
                         <div class="card-body p-2 border-bottom">
@@ -57,11 +43,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="collapse show" id="reservationsCollapse">
-                        <div class="card-body p-2">
-                            <div id="todayReservations">
-                                <!-- Las reservas se cargarán aquí -->
-                            </div>
+                    <div class="card-body p-2">
+                        <div id="todayReservations">
+                            <!-- Las reservas se cargarán aquí -->
                         </div>
                     </div>
                 </div>
@@ -70,17 +54,12 @@
             <!-- Pedidos -->
             <div class="col-md-7" id="ordersSection">
                 <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-header">
                         <span>Últimos Pedidos</span>
-                        <button class="btn" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" type="button" data-bs-toggle="collapse" data-bs-target="#ordersCollapse" aria-expanded="true" aria-controls="ordersCollapse" id="ordersToggle">
-                            <i class="bi bi-chevron-up"></i> Ocultar
-                        </button>
                     </div>
-                    <div class="collapse show" id="ordersCollapse">
-                        <div class="card-body">
-                            <div id="ordersTable">
-                                <!-- Los pedidos se cargarán aquí -->
-                            </div>
+                    <div class="card-body">
+                        <div id="ordersTable">
+                            <!-- Los pedidos se cargarán aquí -->
                         </div>
                     </div>
                 </div>
@@ -92,7 +71,7 @@
             <div class="col-md-6 mx-auto">
                 <div class="card" id="menuCard">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Menú del Día</span>
+                        <span>Menú</span>
                         <button class="btn" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" type="button" data-bs-toggle="collapse" data-bs-target="#menuCollapse" aria-expanded="false" aria-controls="menuCollapse" id="menuToggle">
                             <i class="bi bi-chevron-down"></i> Mostrar/Ocultar
                         </button>

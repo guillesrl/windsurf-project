@@ -126,7 +126,6 @@ h1 { font-size: 0.875rem; }
 
 /* Horarios disponibles */
 .available-slot {
-    background-color: #d1fae5 !important;
     cursor: pointer;
 }
 .available-slot td {
@@ -202,7 +201,7 @@ h1 { font-size: 0.875rem; }
     box-shadow: 0 0 0 3px rgba(160, 174, 192, 0.1);
 }
 [data-bs-theme="dark"] .available-slot {
-    background-color: #064e3b !important;
+    cursor: pointer;
 }
 [data-bs-theme="dark"] .available-slot td {
     font-weight: 500;
